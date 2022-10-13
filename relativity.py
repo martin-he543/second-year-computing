@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.constants import speed_of_light as speedol
 
 class FourVector:    
     """
@@ -41,6 +42,22 @@ class FourVector:
     def copy(self):
         return FourVector(self.__ct, self.__r[0], self.__r[1],self.__r[2])
 
+    # Implement the inner product
+    def inner(self, other):
+        return self.ct() * other.ct() - ((self.r()[0] * other.r()[0]) + (self.r()[1] * other.r()[1]) + (self.r()[2] * other.r()[2]))
+
+    # Implement magnitude squared
+    def magsquare(self):
+        return (self.r()[0])**2 + (self.r()[1])**2 + (self.r()[2])**2 + (self.ct())**2
+
+    # Implement Lorentz Boost in z-direction
+    def boost(self,beta):
+        gamma = 1/np.sqrt(1-beta**2)
+        z_prime = gamma*(self.r()[2] - (beta*self.ct()))
+        ct_prime = gamma*(self.ct() - beta*self.r()[2])
+        x,y = self.r()[0], self.r()[1]
+        return FourVector(ct_prime, x, y, z_prime)
+        
     # Implement the + operator between objects
     def __add__(some, other):
         return FourVector(some.ct() + other.ct(), some.r()[0] + other.r()[0], some.r()[1] + other.r()[1], some.r()[2] + other.r()[2])
@@ -56,18 +73,3 @@ class FourVector:
     # Implement the -= operator between objects
     def __isub__(self, other):
         return FourVector(self.ct() - other.ct(), self.r()[0] - other.r()[0], self.r()[1] - other.r()[1], self.r()[2] - other.r()[2])
-
-    # Implement the inner product
-    def inner(some, other):
-        return some.ct() * other.ct() - ((some.r()[0] * other.r()[0]) + (some.r()[1] * other.r()[1]) + (some.r()[2] * other.r()[2]))
-
-    # Implement magnitude squared
-    def magsquare(some):
-        return some.ct() * some.ct() + (some.r()[0] * some.r()[0]) + (some.r()[1] * some.r()[1]) + (some.r()[2] * some.r()[2])
-
-    # Implement Lorentz Boost
-    def boost(beta,four_vector):
-        gamma = 1/np.sqrt(1-(beta**2))
-        new_ct = 3e8 * gamma * (four_vector[0]/3e8 - beta*four_vector[3]/3e8)
-        new_z = gamma * (four_vector[3] - beta*four_vector[0])
-        return FourVector(new_ct, four_vector[1], four_vector[2], new_z)

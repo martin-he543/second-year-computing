@@ -1,5 +1,5 @@
-#%%     PRELIMINARY TASK 13
 #       OOP 1: Classes & Objects
+#%%     PRELIMINARY TASK 13
 
 class MyComplex:
     """
@@ -26,7 +26,7 @@ P2 = FourVector(ct=99.9, x=1, y=2, z=3)
 print(P2)
 
     
-# %%    TASK 15 & 16
+#%%    TASK 15 & 16
 
 # print(P0.__ct)
 
@@ -40,10 +40,10 @@ print(P2.ct())
 
 P0.copy()
 
-# %%    TASK 17
+#%%    TASK 17
 
+# Verify that all the operators work as intended.
 print(P0 + P2)
-
 print(P0 - P2)
 
 P0 += P2
@@ -53,7 +53,13 @@ P0 -= P2
 print(P0)
 
 
-# %%    TASK 18, 19, 20
+#%%    TASK 18, 19, 20
+print("inner product of P0 and P2", P0.inner(P2))
+print("inner product of P2 and P0", P2.inner(P0))
 
+print("boost of P2 by β = 0.8", P2.boost(0.8))
 
-# Check square invariance.
+# Check square invariance. ERROR! not equivalent
+print("len squared prior boost", P2.magsquare())
+print("len squared after boost", (P2.boost(0.8)).magsquare())
+
